@@ -3,6 +3,9 @@ Contains the dicts for the indices, EWs,
 and chi factors.
 '''
 
+import numpy as np
+
+
 #global strings
 line_keyword = 'line'
 wave_range_keyword = 'wave_range'
@@ -432,41 +435,13 @@ EW_dict = {
 #calibrated chi values from Douglas, 2014 2014ApJ...795..161D for M dwarfs
 # from Schmidt, 2014 2014PASP..126..642S for L dwarfs
 
-kastclassify_chi_factor_dict = {
-    'M0': {'chi': 6.6453e-5,\
-           'chi_err': 0.6207e-5},\
-    'M1': {'chi': 6.0334e-5,\
-           'chi_err': 0.5326e-5},\
-    'M2': {'chi': 5.2658e-5,\
-           'chi_err': 0.5963e-5},\
-    'M3': {'chi': 4.4872e-5,\
-           'chi_err': 0.4967e-5},\
-    'M4': {'chi': 3.5926e-5,\
-           'chi_err': 0.5297e-5},\
-    'M5': {'chi': 2.4768e-5,\
-           'chi_err': 0.4860e-5},\
-    'M6': {'chi': 1.7365e-5,\
-           'chi_err': 0.3475e-5},\
-    'M7': {'chi': 1.2057e-5,\
-           'chi_err': 0.3267e-5},\
-    'M8': {'chi': 0.6122e-5,\
-           'chi_err': 0.2053e-5},\
-    'M9': {'chi': 0.3522e-5,\
-           'chi_err': 0.1432e-5},\
-    'L0': {'chi': 1.98e-6,\
-           'chi_err': 0.27e-6},\
-    'L1': {'chi': 2.25e-6,\
-           'chi_err': 0.11e-6},\
-    'L2': {'chi': 2.11e-6,\
-           'chi_err': 0.36e-6},\
-    'L3': {'chi': 1.67e-6,\
-           'chi_err': 0.22e-6},\
-    'L4': {'chi': 1.16e-6,\
-           'chi_err': np.nan},\
-    'L5': {'chi': 1.46e-6,\
-           'chi_err': 0.28e-6},\
-    'L6': {'chi': 1.23e-6,\
-           'chi_err': np.nan},\
-    'L7': {'chi': 0.73e-6,\
-           'chi_err': np.nan},\
-}
+chi_factor_types = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+
+chi_factor_values = [6.6453e-5, 6.0334e-5, 5.2658e-5, 4.4872e-5, 3.5926e-5, 2.4768e-5,\
+                    1.7365e-5, 1.2057e-5, 0.6122e-5, 0.3522e-5, 1.98e-6, 2.25e-6, 2.11e-6,\
+                    1.67e-6, 1.16e-6, 1.46e-6, 1.23e-6, 0.73e-6]
+
+chi_factor_values_err = [0.6207e-5, 0.5326e-5, 0.5963e-5, 0.4967e-5, 0.5297e-5, 0.4860e-5,\
+                        0.3475e-5, 0.3267e-5, 0.2053e-5, 0.1432e-5, 0.27e-6, 0.11e-6, 0.36e-6,\
+                        0.22e-6, np.nan, 0.28e-6, np.nan, np.nan]
+

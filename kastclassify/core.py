@@ -535,92 +535,85 @@ def determine_metallicity_class(zeta):
     return metallicity_class
 
 #TODO
-#replace classify_by_index
-'''
-def classify_by_index(spec, no_trials=100, plot=False):
+
+def classify_by_index(spec, index_dict=None, no_trials=100, plot=False):
     
-    lepine_indices = measure_index_set(spec, ref='lepine2007', no_trials=no_trials, plot=plot)
-    
-    gizis_indices = measure_index_set(spec, ref='gizis', no_trials=no_trials, plot=plot)
+    if index_dict is not None:
+        lepine_indices = index_dict['lepine2007']
+        gizis_indices = index_dict['gizis']
+        
+    else:  
+        lepine_indices = measure_index_set(spec, ref='lepine2007', no_trials=no_trials, plot=plot)
+
+        gizis_indices = measure_index_set(spec, ref='gizis', no_trials=no_trials, plot=plot)
     
     zeta, zeta_err = measure_lepine_zeta(lepine_indices)
     
     metallicity_class = determine_metallicity_class(zeta)
-    
-    #gizis typing good for dwarfs
-    if metallicity_class == 'Dwarf':
-        
-        indices = gizis_indices
-        
-        TiO5_index = indices['TiO5'][0]
-        TiO5_err = indices['TiO5'][1]
 
-        CaH2_index = indices['CaH2'][0]
-        CaH2_err = indices['CaH2'][1]
+    indices = gizis_indices
 
-        CaH3_index = indices['CaH3'][0]
-        CaH3_err = indices['CaH3'][1]
+    TiO5_index = indices['TiO5'][0]
+    TiO5_err = indices['TiO5'][1]
 
-        TiO5_spt, CaH2_spt, CaH3_spt = gizis_spt(TiO5_index, CaH2_index, CaH3_index)
+    CaH2_index = indices['CaH2'][0]
+    CaH2_err = indices['CaH2'][1]
 
-        #doing MC
+    CaH3_index = indices['CaH3'][0]
+    CaH3_err = indices['CaH3'][1]
 
-        TiO5_samps = np.random.normal(TiO5_index, TiO5_err, no_trials)
-        CaH2_samps = np.random.normal(CaH2_index, CaH2_err, no_trials)
-        CaH3_samps = np.random.normal(CaH3_index, CaH3_err, no_trials)
+    TiO5_spt, CaH2_spt, CaH3_spt = gizis_spt(TiO5_index, CaH2_index, CaH3_index)
 
-        TiO5_spt_samps, CaH2_spt_samps, CaH3_spt_samps = gizis_spt(TiO5_samps, CaH2_samps, CaH3_samps)
+    #doing MC
 
-        TiO5_spt_err = np.std(TiO5_spt_samps)
-        CaH2_spt_err = np.std(CaH2_spt_samps)
-        CaH3_spt_err = np.std(CaH3_spt_samps)
-        
-        result = {}
-        
-        result['gizis_TiO5_spt'] = TiO5_spt
-        result['gizis_TiO5_spt_err'] = TiO5_spt_err
-        result['gizis_CaH2_spt'] = CaH2_spt
-        result['gizis_CaH2_spt_err'] = CaH2_spt_err
-        result['gizis_CaH3_spt'] = CaH3_spt
-        result['gizis_CaH3_spt_err'] = CaH3_spt_err
+    TiO5_samps = np.random.normal(TiO5_index, TiO5_err, no_trials)
+    CaH2_samps = np.random.normal(CaH2_index, CaH2_err, no_trials)
+    CaH3_samps = np.random.normal(CaH3_index, CaH3_err, no_trials)
 
-        return result, (zeta, zeta_err), metallicity_class
-    
-    #lepine typing good for all other subdwarfs
-    else:
-        
-        indices = measure_index_set(spec, ref='lepine2007')
+    TiO5_spt_samps, CaH2_spt_samps, CaH3_spt_samps = gizis_spt(TiO5_samps, CaH2_samps, CaH3_samps)
 
-        #unpacking values
+    TiO5_spt_err = np.std(TiO5_spt_samps)
+    CaH2_spt_err = np.std(CaH2_spt_samps)
+    CaH3_spt_err = np.std(CaH3_spt_samps)
 
-        CaH3 = indices['CaH3'][0]
-        CaH3_err = indices['CaH3'][1]
+    result = {}
 
-        CaH2 = indices['CaH2'][0]
-        CaH2_err = indices['CaH2'][1]
-
-        #getting the value here
-        lepine_spt_measurement = lepine_spt(CaH2, CaH3)
-
-        #doing MC here
-        no_trials = 1000
-
-        CaH3_samps = np.random.normal(CaH3, CaH3_err, no_trials)
-
-        CaH2_samps = np.random.normal(CaH2, CaH2_err, no_trials)
-
-        lepine_spt_samps = lepine_spt(CaH2_samps, CaH3_samps)
+    result['gizis_TiO5_spt'] = TiO5_spt
+    result['gizis_TiO5_spt_err'] = TiO5_spt_err
+    result['gizis_CaH2_spt'] = CaH2_spt
+    result['gizis_CaH2_spt_err'] = CaH2_spt_err
+    result['gizis_CaH3_spt'] = CaH3_spt
+    result['gizis_CaH3_spt_err'] = CaH3_spt_err
 
 
-        lepine_spt_err = np.std(lepine_spt_samps)
-        
-        result = {}
-        
-        result['lepine_spt'] = lepine_spt_measurement
-        result['lepine_spt_err'] = lepine_spt_err
-        
-        return result, (zeta, zeta_err), metallicity_class
-'''    
+    indices = lepine_indices
+    #unpacking values
+
+    CaH3 = indices['CaH3'][0]
+    CaH3_err = indices['CaH3'][1]
+
+    CaH2 = indices['CaH2'][0]
+    CaH2_err = indices['CaH2'][1]
+
+    #getting the value here
+    lepine_spt_measurement = lepine_spt(CaH2, CaH3)
+
+    #doing MC here
+
+    CaH3_samps = np.random.normal(CaH3, CaH3_err, no_trials)
+
+    CaH2_samps = np.random.normal(CaH2, CaH2_err, no_trials)
+
+    lepine_spt_samps = lepine_spt(CaH2_samps, CaH3_samps)
+
+
+    lepine_spt_err = np.std(lepine_spt_samps)
+
+    result['lepine_spt'] = lepine_spt_measurement
+    result['lepine_spt_err'] = lepine_spt_err
+
+    return result, (zeta, zeta_err), metallicity_class    
+
     
 
 def lepine_spt(CaH2, CaH3):
@@ -957,20 +950,15 @@ def measure_EW_element(spec, ref, no_trials=100, plot=False, file=None, verbose=
 #interpolate for chi factors
 def calculate_L_Lbol(Halpha_EW, Halpha_EW_err, spt):
     
-    chi = 0.
-    chi_err = 0.
+    chi_interp = interp1d(kastclassify.defs.chi_factor_types, kastclassify.defs.chi_factor_values, bounds_error=False, fill_value=np.nan)
+
+    chi_err_interp = interp1d(kastclssify.defs.chi_factor_types, kastclassify.defs.chi_factor_values_err, bounds_error=False, fill_value=np.nan)
     
     stype = typeToNum(spt)
     
-    #only have to closest type, not closest half type
-    #so round down
-    stype = int(stype)
+    chi = chi_interp(stype)
     
-    for ref in list(kastclassify_chi_factor_dict):
-
-        if typeToNum(ref) == stype:
-            chi = kastclassify_chi_factor_dict[ref]['chi']
-            chi_err = kastclassify_chi_factor_dict[ref]['chi_err']
+    chi_err = chi_err_interp(stype)
 
     Lratio = chi * Halpha_EW
     Lratio_err = chi_err * Halpha_EW_err
@@ -1050,7 +1038,7 @@ def calc_spec_info(filepath, plot=False, no_index_trials=100, no_EW_trials=30, d
     #calculating with the measurements
     
     print('Calculating spectral types by index...')
-    index_spt, zeta_info, metallicity_class = classify_by_index(spec)
+    index_spt, zeta_info, metallicity_class = classify_by_index(spec, index_dict=indices)
     
     print('Done!')
     
